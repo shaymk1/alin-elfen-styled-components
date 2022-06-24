@@ -1,0 +1,108 @@
+instructions:
+#npm init @eslint/config>>>this will create a.eslintrc.json file with dependencies:
+       ##Installing eslint-plugin-react@^7.28.0, @typescript-eslint/eslint-plugin@latest, eslint-config-airbnb@latest, eslint@^7.32.0 || ^8.2.0, eslint-plugin-import@^2.25.3, eslint-plugin-jsx-a11y@^6.5.1, eslint-plugin-react-hooks@^4.3.0, @typescript-eslint/parser@latest
+
+#npm i eslint-config-airbnb-typescript --save-dev
+
+
+######eslint config######
+#  under env, include:
+"jest":true >>>> help with testing
+#remove this from extends:
+"plugin:react/recommended",
+        "airbnb"
+#and insert the following isntead:
+  "extends": [
+       "react-app",
+       "react-app/jest",
+        "airbnb",
+        "airbnb/typescript", >>>> had to remove this line,it was giving me errors of ESLint couldn't find the config "airbnb/typescript" to extend from>>>>
+        "plugin:import/typescript"
+    ],
+# under here, iclude the project path to typescript:
+ "ecmaVersion": "latest",
+        "sourceType": "module",
+        "project": "./tsconfig.json"
+
+#### package.json###:
+# under scripts:
+"lint": "eslint ."
+"lint:fix": "eslint --fix"
+
+###terminal##
+npm run lint
+#getting errors: removed this line from package.json:
+"@typescript-eslint/parser": "^5.29.0",
+
+#also in node-models/eslint-config-airbnb/package.json:
+  ## i added the line:
+      ###"./typescript": "./typescript.ts",>>>>because it was giving me an error of not knowing where to extend the ./typescript from as it was mentioned here
+
+##we need to add rules in .eslintrc.json:
+##rules:
+"rules": {
+        "quotes":[
+            "error",
+            "single",
+            {
+                "avoidEscape":true
+            }
+        ],
+        "@typescript-eslint/quotes":[
+           "error",
+            "single", 
+         {
+                "avoidEscape":true
+            }
+        ],
+        "react/jsx-uses-react": ["off"],
+        "react/react-in-jsx-scope":["off"],
+        "react/jsx-props-no-spreading":["warn"],
+        "no-shadow": "off"
+    }
+}
+
+#to fix some easy to fix errors:
+# this line from package.json because it was giving me errors :
+"lint:fix": "eslint --fix" , sometimes you may need to replace it with "lint:fix": "eslint --fix --ext .js,.jsx ."
+
+# then i run npx eslint . >>> to check errors
+# then npx eslint --fix . >>> to fix what can be fixed
+
+# it was giving me this error:
+typescript-eslint-missing-file-extension-ts-import-extensions so i had to put this back in the eslintrc extends:
+       ##"airbnb-typescript",
+
+
+####prettier####
+##npm i prettier eslint-config-prettier eslint-plugin-prettier --save-dev
+
+#in the eslintrc, under extends, add:
+  #"plugin:prettier/recommended"
+#in the plugin, add "prettier" as well
+
+##add a .prettierrc file in the root:
+   {
+    "tabWidth": 2,
+    "useTabs": false,
+    "semi": true,
+    "singleQuote":true,
+    "trailingComma": "all",
+    "printWidth": 80
+
+}
+# i removed this :
+"trailingComma": "all", to "trailingComma": "none",but apperntly the trailingComma helps to avoid git conflict
+
+###### husky ##### 
+ # its for pre commits scripts
+ # automatic install:
+   #npx husky-init && npm install  
+# then set the scripts with:
+  #npx husky set .husky/pre-commit "npm run lint && test"
+  # created a pre-commit for us>>>
+  # here do npm istall >>> to install git hooks
+  #then add :
+    #git commit --no-verify -m "your comment" >>> because just git commit -m 'message' was giving me a path error
+
+ 
